@@ -1,7 +1,7 @@
 IBM Websphere MQ
 =====================
 
-[![Build Status](https://travis-ci.org/mm0/ansible-role-ibm-websphere-mq.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-ibm-websphere-mq)
+[![Build Status](https://travis-ci.org/mm0/ansible-role-ibm-websphere-mq.svg?branch=master)](https://travis-ci.org/mm0/ansible-role-ibm-websphere-mq) [![Galaxy](https://img.shields.io/badge/galaxy-mm0.ibm--websphere--mq-blue.svg?style=flat)](https://galaxy.ansible.com/mm0/ibm-websphere-mq)
 
 
 An Ansible role that installs IBM Websphere MQ on RHEL/Centos using locally provided installation package and License
