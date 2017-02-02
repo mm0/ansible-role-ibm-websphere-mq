@@ -1,2 +1,8 @@
 ---
 # defaults file for websphere-mq
+required_directories:
+- opt/mqm
+- /var/mqm
+
+user: mqm
+group: mqm

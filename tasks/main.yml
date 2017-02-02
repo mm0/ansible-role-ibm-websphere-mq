@@ -1,2 +1,22 @@
 ---
-# tasks file for websphere-mq
+- name: Ensure user and group exists
+  user: name="{{ user }}" group="{{ group }}" state=present
+  become: yes
+
+- name: Ensure Filesystem directories are available
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ group }}"
+  with_items: "{{ required_directories }}"
+
+- name: Ensure TCP Parameters exist
+- name: Ensure Install package is available
+- name: Ensure License is available
+- name: Unarchive install archive
+- name: Accept Licenese
+- name: Install various packages with RPM
+- name: setmqinst path
+- name: Set mqm profile as "{{ user }}"
+- name: dspmqver
