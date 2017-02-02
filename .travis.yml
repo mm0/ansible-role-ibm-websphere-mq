@@ -20,7 +20,7 @@ install:
 
   # Create ansible.cfg with correct roles_path
   - printf '[defaults]\nroles_path=tests/roles' >ansible.cfg
-  - sudo ln -s ../../ test/roles/mm0.rh-websphere-mq
+  - sudo ln -s ../../ tests/roles/mm0.rh-websphere-mq
 
 
 script:
