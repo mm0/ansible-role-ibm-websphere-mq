@@ -1,5 +1,9 @@
 ---
-- name: Ensure user and group exists
+- name: Ensure group exists
+  group: name="{{ group }}" state=present
+  become: yes
+
+- name: Ensure user exists
   user: name="{{ user }}" group="{{ group }}" state=present
   become: yes
 
@@ -10,13 +14,43 @@
     owner: "{{ user }}"
     group: "{{ group }}"
   with_items: "{{ required_directories }}"
+  become: yes
 
-- name: Ensure TCP Parameters exist
+#TODO: - name: Ensure TCP Parameters exist
+
 - name: Ensure Install package is available
-- name: Ensure License is available
+  stat:
+    path: "{{ install_archive_path }}"
+  register: package
+
+- name: Fail when package unavailable
+  fail: "msg='Install archive not found path: {{ install_archive_path }}'"
+  when: package.stat.exists == False
+
 - name: Unarchive install archive
-- name: Accept Licenese
-- name: Install various packages with RPM
+  unarchive: src="{{ install_archive_path }}" dest="{{ rpm_dir }}" remote_src=yes copy=no
+  become: yes
+
+- name: Accept License
+  shell: chdir="{{ rpm_dir }}" ./mqlicense.sh -accept
+  become: yes
+
+- name: Find rpms
+  shell: chdir="{{ rpm_dir }}" ls {{ item }}
+  with_items: "{{ rpm_fileglobs }}"
+  register: rpms
+  become: yes
+
+- name: Install rpm packages
+  yum:
+    name: "{{ rpm_dir }}/{{ item.stdout }}"
+    state: present
+  with_items: "{{ rpms.results }}"
+  become: yes
+
 - name: setmqinst path
-- name: Set mqm profile as "{{ user }}"
+  shell: chdir=/opt/mqm/bin ./setmqinst -i -p /opt/mqm
+
+#- name: Set mqm profile as "{{ user }}"
 - name: dspmqver
+  shell: chdir=/opt/mqm/bin ./dspmqver
