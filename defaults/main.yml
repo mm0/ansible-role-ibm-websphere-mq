@@ -36,7 +36,7 @@ sysctl_settings:
   value: 18446744073692774399
 - name: fs.file-max
   value: 3255749
-- name: net.ipv4.tcp_keep_alive_time
+- name: net.ipv4.tcp_keepalive_time
   value: 300
 
 user_limits:
