@@ -28,7 +28,7 @@
   when: package.stat.exists == False
 
 - name: Unarchive install archive
-  unarchive: src="{{ install_archive_path }}" dest="{{ rpm_dir }}" remote_src=yes copy=no
+  unarchive: src="{{ install_archive_path }}" dest="{{ rpm_dir }}" copy=no
   become: yes
 
 - name: Accept License
