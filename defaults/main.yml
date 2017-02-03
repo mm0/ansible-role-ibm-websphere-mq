@@ -3,6 +3,7 @@
 required_directories:
 - /opt/mqm
 - /var/mqm
+- /opt/temporary
 
 user: mqm
 group: mqm
