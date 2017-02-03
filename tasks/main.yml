@@ -1,4 +1,9 @@
 ---
+- name: Install bc dependency (for mqconfig)
+  package:
+    name: bc
+    state: present
+
 - name: Ensure group exists
   group: name="{{ group }}" state=present
   become: yes
@@ -16,7 +21,14 @@
   with_items: "{{ required_directories }}"
   become: yes
 
-#TODO: - name: Ensure TCP Parameters exist
+- name: Enable without reboot
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_set: yes
+  with_items: "{{ sysctl_settings }}"
+  become: yes
 
 - name: Ensure Install package is available
   stat:

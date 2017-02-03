@@ -24,3 +24,19 @@ rpm_fileglobs:
 - "MQSeriesJava-*.rpm"
 - "MQSeriesGSKit-*.rpm"
 - "MQSeriesAMS-*.rpm"
+
+sysctl_settings:
+- name: kernel.sem
+  value: 600 256000 300 2048
+- name: kernel.shmmax
+  value: 18446744073692774399
+- name: kernel.shmmni
+  value: 4096
+- name: kernel.shmall
+  value: 18446744073692774399
+- name: fs.file-max
+  value: 3255749
+- name: net.ipv4.tcp_keep_alive_time
+  value: 300
+
+user_limits:
