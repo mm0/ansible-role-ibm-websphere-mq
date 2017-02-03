@@ -8,9 +8,8 @@ user: mqm
 group: mqm
 archive_dir: /mnt/nfs/ansible/websphere-mq/
 unarchive_dir: /opt/temporary
-rpm_dir: /opt/mqm/Software
 
-install_archive_path: "{{ rpm_dir }}/MQ_7.5.0.2_TRIAL_LNX_ON_X86_64_ML.tar.gz"
+install_archive_path: "{{ archive_dir }}/MQ_7.5.0.2_TRIAL_LNX_ON_X86_64_ML.tar.gz"
 
 rpm_fileglobs:
 - "MQSeriesRuntime-*.rpm"
