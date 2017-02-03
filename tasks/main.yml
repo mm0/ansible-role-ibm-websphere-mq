@@ -28,22 +28,22 @@
   when: package.stat.exists == False
 
 - name: Unarchive install archive
-  unarchive: src="{{ install_archive_path }}" dest="{{ rpm_dir }}" copy=no
+  unarchive: src="{{ install_archive_path }}" dest="{{ unarchive_dir }}" copy=no
   become: yes
 
 - name: Accept License
-  shell: chdir="{{ rpm_dir }}" ./mqlicense.sh -accept
+  shell: chdir="{{ unarchive_dir }}" ./mqlicense.sh -accept
   become: yes
 
 - name: Find rpms
-  shell: chdir="{{ rpm_dir }}" ls {{ item }}
+  shell: chdir="{{ unarchive_dir }}" ls {{ item }}
   with_items: "{{ rpm_fileglobs }}"
   register: rpms
   become: yes
 
 - name: Install rpm packages
   yum:
-    name: "{{ rpm_dir }}/{{ item.stdout }}"
+    name: "{{ unarchive_dir }}/{{ item.stdout }}"
     state: present
   with_items: "{{ rpms.results }}"
   become: yes
