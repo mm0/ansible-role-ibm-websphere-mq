@@ -40,3 +40,11 @@ sysctl_settings:
   value: 300
 
 user_limits:
+- domain: "{{ user }}"
+  type: "hard"
+  item: "nofile"
+  value: "10240"
+- domain: "{{ user }}"
+  type: "soft"
+  item: "nofile"
+  value: "10240"

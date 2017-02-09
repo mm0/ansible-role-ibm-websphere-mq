@@ -29,10 +29,11 @@ None
 
 Example Playbook
 ---------------
-
+```yaml
     - hosts: webservers
-            roles:
-			- { role: mm0.ibm-websphere-mq }
+      roles:
+	  - { role: mm0.ibm-websphere-mq }
+```
 
 License
 ---------------

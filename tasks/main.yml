@@ -3,6 +3,7 @@
   package:
     name: bc
     state: present
+  become: yes
 
 - name: Ensure group exists
   group: name="{{ group }}" state=present
@@ -28,6 +29,16 @@
     state: present
     sysctl_set: yes
   with_items: "{{ sysctl_settings }}"
+  become: yes
+
+- name: Set user limits
+  pam_limits:
+    domain: "{{ item.domain }}"
+    limit_type: "{{ item.type }}"
+    limit_item: "{{ item.item }}"
+    value: "{{ item.value }}"
+    use_max: yes
+  with_items: "{{ user_limits }}"
   become: yes
 
 - name: Ensure Install package is available
