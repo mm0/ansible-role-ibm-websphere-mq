@@ -1,50 +1,51 @@
 ---
 # defaults file for websphere-mq
-required_directories:
-- /opt/mqm
-- /var/mqm
-- /opt/temporary
 
-user: mqm
-group: mqm
-archive_dir: /mnt/nfs/ansible/websphere-mq/
-unarchive_dir: /opt/temporary
+environment_name: Dev1
 
-install_archive_path: "{{ archive_dir }}/MQ_7.5.0.2_TRIAL_LNX_ON_X86_64_ML.tar.gz"
+webspheremq:
+  user: mqm
+  group: mqm
+  archive_dir: /mnt/nfs/ansible/websphere-mq/
+  unarchive_dir: "/opt/temporary/{{ environment_name }}"
+  rpm_fileglobs:
+  - "MQSeriesRuntime-*.rpm"
+  - "MQSeriesServer-*.rpm"
+  - "MQSeriesClient-*.rpm"
+  - "MQSeriesSDK-*.rpm"
+  - "MQSeriesMan-*.rpm"
+  - "MQSeriesSamples-*.rpm"
+  - "MQSeriesJRE-*.rpm"
+  - "MQSeriesExplorer-*.rpm"
+  - "MQSeriesJava-*.rpm"
+  - "MQSeriesGSKit-*.rpm"
+  - "MQSeriesAMS-*.rpm"
+  sysctl_settings:
+  - name: kernel.sem
+    value: 600 256000 300 2048
+  - name: kernel.shmmax
+    value: 18446744073692774399
+  - name: kernel.shmmni
+    value: 4096
+  - name: kernel.shmall
+    value: 18446744073692774399
+  - name: fs.file-max
+    value: 3255749
+  - name: net.ipv4.tcp_keepalive_time
+    value: 300
 
-rpm_fileglobs:
-- "MQSeriesRuntime-*.rpm"
-- "MQSeriesServer-*.rpm"
-- "MQSeriesClient-*.rpm"
-- "MQSeriesSDK-*.rpm"
-- "MQSeriesMan-*.rpm"
-- "MQSeriesSamples-*.rpm"
-- "MQSeriesJRE-*.rpm"
-- "MQSeriesExplorer-*.rpm"
-- "MQSeriesJava-*.rpm"
-- "MQSeriesGSKit-*.rpm"
-- "MQSeriesAMS-*.rpm"
-
-sysctl_settings:
-- name: kernel.sem
-  value: 600 256000 300 2048
-- name: kernel.shmmax
-  value: 18446744073692774399
-- name: kernel.shmmni
-  value: 4096
-- name: kernel.shmall
-  value: 18446744073692774399
-- name: fs.file-max
-  value: 3255749
-- name: net.ipv4.tcp_keepalive_time
-  value: 300
-
-user_limits:
-- domain: "{{ user }}"
-  type: "hard"
-  item: "nofile"
-  value: "10240"
-- domain: "{{ user }}"
-  type: "soft"
-  item: "nofile"
-  value: "10240"
+webspheremq_internal:
+  install_archive_path: "{{ webspheremq.archive_dir }}/MQ_7.5.0.2_TRIAL_LNX_ON_X86_64_ML.tar.gz"
+  required_directories:
+  - /opt/mqm
+  - /var/mqm
+  - "{{ webspheremq.unarchive_dir }}"
+  user_limits:
+  - domain: "{{ webspheremq.user }}"
+    type: "hard"
+    item: "nofile"
+    value: "10240"
+  - domain: "{{  webspheremq.user }}"
+    type: "soft"
+    item: "nofile"
+    value: "10240"

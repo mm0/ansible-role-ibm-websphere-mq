@@ -16,10 +16,17 @@ Requirements
 Role Variables
 ---------------
 
-Available variables are listed below, there are no defaults:
+*General variables*
 
-```yml
-```
+| Name              | Default Value       | Description          |
+|-------------------|---------------------|----------------------|
+| `environment_name` | `Dev1` | Self Explanatory |
+| `webspheremq.group` | `"mqm"` | App Group |
+| `webspheremq.user ` | `"mqm"` | App User |
+| `webspheremq.archive_dir` | `"/mnt/nfs/ansible/websphere-mq/"` | Directory where installer archive lives|
+| `webspheremq.unarchive_dir` | `"/opt/temporary/{{ environment_name }}"` | Directory where zip installer lives|
+| `webspheremq.group` | `"mqm"` | App Group |
+| `webspheremq_internal.install_archive_path` | `"{{ webspheremq.archive_dir }}/MQ_7.5.0.2_TRIAL_LNX_ON_X86_64_ML.tar.gz"` | Full path to archive |
 
 
 Dependencies
@@ -30,9 +37,11 @@ None
 Example Playbook
 ---------------
 ```yaml
-    - hosts: webservers
-      roles:
-	  - { role: mm0.ibm-websphere-mq }
+- hosts: webservers
+  vars:
+  - environment_name: MyEnvironment
+  roles:
+  - { role: mm0.ibm-websphere-mq }
 ```
 
 License

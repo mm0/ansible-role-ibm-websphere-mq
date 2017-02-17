@@ -6,20 +6,20 @@
   become: yes
 
 - name: Ensure group exists
-  group: name="{{ group }}" state=present
+  group: name="{{ webspheremq.group }}" state=present
   become: yes
 
 - name: Ensure user exists
-  user: name="{{ user }}" group="{{ group }}" state=present
+  user: name="{{ webspheremq.user }}" group="{{ webspheremq.group }}" state=present
   become: yes
 
 - name: Ensure Filesystem directories are available
   file:
     path: "{{ item }}"
     state: directory
-    owner: "{{ user }}"
-    group: "{{ group }}"
-  with_items: "{{ required_directories }}"
+    owner: "{{ webspheremq.user }}"
+    group: "{{ webspheremq.group }}"
+  with_items: "{{ webspheremq_internal.required_directories }}"
   become: yes
 
 - name: Enable without reboot
@@ -28,7 +28,7 @@
     value: "{{ item.value }}"
     state: present
     sysctl_set: yes
-  with_items: "{{ sysctl_settings }}"
+  with_items: "{{ webspheremq.sysctl_settings }}"
   become: yes
 
 - name: Set user limits
@@ -38,35 +38,35 @@
     limit_item: "{{ item.item }}"
     value: "{{ item.value }}"
     use_max: yes
-  with_items: "{{ user_limits }}"
+  with_items: "{{ webspheremq_internal.user_limits }}"
   become: yes
 
 - name: Ensure Install package is available
   stat:
-    path: "{{ install_archive_path }}"
+    path: "{{ webspheremq_internal.install_archive_path }}"
   register: package
 
 - name: Fail when package unavailable
-  fail: "msg='Install archive not found path: {{ install_archive_path }}'"
+  fail: "msg='Install archive not found path: {{ webspheremq_internal.install_archive_path }}'"
   when: package.stat.exists == False
 
 - name: Unarchive install archive
-  unarchive: src="{{ install_archive_path }}" dest="{{ unarchive_dir }}" copy=no
+  unarchive: src="{{ webspheremq_internal.install_archive_path }}" dest="{{ webspheremq.unarchive_dir }}" copy=no
   become: yes
 
 - name: Accept License
-  shell: chdir="{{ unarchive_dir }}" ./mqlicense.sh -accept
+  shell: chdir="{{ webspheremq.unarchive_dir }}" ./mqlicense.sh -accept
   become: yes
 
 - name: Find rpms
-  shell: chdir="{{ unarchive_dir }}" ls {{ item }}
-  with_items: "{{ rpm_fileglobs }}"
+  shell: chdir="{{ webspheremq.unarchive_dir }}" ls {{ item }}
+  with_items: "{{ webspheremq.rpm_fileglobs }}"
   register: rpms
   become: yes
 
 - name: Install rpm packages
   yum:
-    name: "{{ unarchive_dir }}/{{ item.stdout }}"
+    name: "{{ webspheremq.unarchive_dir }}/{{ item.stdout }}"
     state: present
   with_items: "{{ rpms.results }}"
   become: yes
