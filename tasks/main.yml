@@ -1,26 +1,4 @@
 ---
-- name: Install bc dependency (for mqconfig)
-  package:
-    name: bc
-    state: present
-  become: yes
-
-- name: Ensure group exists
-  group: name="{{ webspheremq.group }}" state=present
-  become: yes
-
-- name: Ensure user exists
-  user: name="{{ webspheremq.user }}" group="{{ webspheremq.group }}" state=present
-  become: yes
-
-- name: Ensure Filesystem directories are available
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ webspheremq.user }}"
-    group: "{{ webspheremq.group }}"
-  with_items: "{{ webspheremq_internal.required_directories }}"
-  become: yes
 
 - name: Enable without reboot
   sysctl:

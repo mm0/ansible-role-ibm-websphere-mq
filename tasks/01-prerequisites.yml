@@ -1,0 +1,35 @@
+- name: "Check required directories and files exist"
+  stat: path="{{ item }}"
+  register: initial_file_check
+  with_items:
+  - "{{ webpheremq_internal.install_archive_path }}"
+  become: yes
+
+- name: "Fail when required directories do not exist"
+  fail:
+    msg: "Required Installation File or Directory is missing: {{ item.item }}"
+  when: "{{ item.stat.exists | bool}} == false"
+  with_items: "{{ initial_file_check.results }}"
+
+- name: Install bc dependency (for mqconfig)
+  package:
+    name: bc
+    state: present
+  become: yes
+
+- name: Ensure group exists
+  group: name="{{ webspheremq.group }}" state=present
+  become: yes
+
+- name: Ensure user exists
+  user: name="{{ webspheremq.user }}" group="{{ webspheremq.group }}" state=present
+  become: yes
+
+- name: Ensure Filesystem directories are available
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ webspheremq.user }}"
+    group: "{{ webspheremq.group }}"
+  with_items: "{{ webspheremq_internal.required_directories }}"
+  become: yes
