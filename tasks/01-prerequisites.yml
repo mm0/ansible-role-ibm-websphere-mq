@@ -2,7 +2,7 @@
   stat: path="{{ item }}"
   register: initial_file_check
   with_items:
-  - "{{ webpheremq_internal.install_archive_path }}"
+  - "{{ webspheremq_internal.install_archive_path }}"
   become: yes
 
 - name: "Fail when required directories do not exist"
