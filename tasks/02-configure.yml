@@ -51,9 +51,13 @@
 - name: setmqinst path
   shell: chdir=/opt/mqm/bin ./setmqinst -i -p /opt/mqm
 
-#- name: Set mqm profile as "{{ user }}"
-- name: dspmqver
-  shell: chdir=/opt/mqm/bin ./dspmqver
+- name: Update mqm user .profile
+  template:
+    owner: "{{ webspheremq.user }}"
+    group: "{{ webspheremq.group }}"
+    src: .profile.j2
+    dest: "/home/mqm/.profile"
+    mode: "0644"
 
 #- name: Queue Manager Creation
 #  shell: crtmqm -c "policy Center Dev" -ld {{ webspheremq_log_directory }} -md {{ webspheremq_data_directory }} -lc -lf  16384 -lp 150 -ls 50 -u {{ webspheremq.QUEUE_NAME }}.DEAD.QUEUE {{ webspheremq.QUEUE_NAME }}
